@@ -2,6 +2,7 @@
  * Created by Administrator on 2017/7/3 0003.
  */
 var gulp = require('gulp');
+var babel = require('gulp-babel'); //es6转es5
 var uglify = require('gulp-uglify'); //js 压缩插件
 var bom = require('gulp-bom'); //解决中文乱码插件
 var minifyCss = require('gulp-minify-css'); //css 压缩插件
@@ -9,11 +10,13 @@ var minifyHtml = require('gulp-minify-html'); //html 压缩插件
 var imagemin = require('gulp-imagemin'); //图片压缩相关插件
 var pngquant = require('imagemin-pngquant'); //png 图片压缩插件
 var rename = require('gulp-rename'); //重命名插件
-//压缩 js
+
+
+// //压缩 js
 gulp.task('jsTask', function(){
     gulp.src('src/js/*')
-    // .pipe(bom())
-        .pipe(uglify())
+        .pipe(babel({presets:['es2015']})) //es6转es5
+        .pipe(uglify()) //js压缩
         .pipe(gulp.dest('dest/js'));
 });
 //压缩 css
@@ -40,13 +43,15 @@ gulp.task('imgTask', function(){
 //重命名
 gulp.task('renameTask', function(){
     gulp.src('src/js/bullet.js')
+        .pipe(babel({presets:['es2015']})) //es6转es5
         .pipe(uglify())
         .pipe(rename('bullet.min.js'))
         .pipe(gulp.dest('dest/js'));
 });
-gulp.task('default', ['jsTask', 'cssTask', 'htmlTask2', 'imgTask',
-    'renameTask']);
+// gulp.task('default', ['jsTask', 'cssTask', 'htmlTask2', 'imgTask',
+//     'renameTask']);
 
+gulp.task('default', ['jsTask','cssTask', 'htmlTask2', 'imgTask','renameTask']);
 
 
 
